@@ -1,0 +1,15 @@
+[package]
+name = "flate2_bench"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+flate2 = { version = "1", default-features=false }
+statrs = "0.18.0"
+
+[features]
+default = ["miniz_oxide"]
+
+miniz_oxide = ["flate2/miniz_oxide"]
+zlib-rs     = ["flate2/zlib-rs"]
+zlib-ng     = ["flate2/zlib-ng"]
