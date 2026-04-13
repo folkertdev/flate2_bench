@@ -1,9 +1,18 @@
-cargo build --release --features=miniz_oxide
+# -Cllvm-args=-enable-dfa-jump-thread helps optimize the inflate state machine.
+FLAGS="-Cllvm-args=-enable-dfa-jump-thread"
+# FLAGS=""
+
+CC=clang RUSTFLAGS="$FLAGS" cargo +nightly build  --release --features=miniz_oxide
 cp target/release/flate2_bench target/release/flate2_bench_miniz_oxide
-cargo build --release --features=zlib-ng
+CC=clang RUSTFLAGS="$FLAGS" cargo +nightly build --release --features=zlib-ng
 cp target/release/flate2_bench target/release/flate2_bench_zlib_ng
-cargo build --release --features=zlib-rs
+CC=clang RUSTFLAGS="$FLAGS" cargo +nightly build --release --features=zlib-rs
 cp target/release/flate2_bench target/release/flate2_bench_zlib_rs
+
+# The comparison is fairest if clang and rustc use the same LLVM version.
+clang --version
+echo ""
+rustc +nightly --version --verbose
 
 echo "\n -- inflate (chunks of 4096 bytes) -- \n"
 
